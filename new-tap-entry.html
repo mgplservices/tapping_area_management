@@ -1,42 +1,136 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta charset="UTF-8">
-  <title>Test Form</title>
+  <title>Taps Inward Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f0f4f8;
+      max-width: 600px;
+      margin: auto;
+      font-size: 1.08rem;
+    }
+    h3 {
+      text-align: center;
+      color: #333;
+      font-size: 1.44rem;
+      margin-bottom: 1.2rem;
+    }
+    label {
+      display: block;
+      margin-top: 0.6rem;
+      font-weight: bold;
+      color: #444;
+      font-size: 0.96rem;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      margin-bottom: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 0.96rem;
+    }
+    button {
+      width: 100%;
+      padding: 0.9rem;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+      margin-top: 1rem;
+    }
+    button:hover { background-color: #45a049; }
+    button:disabled { background-color: #a5d6a7; cursor: not-allowed; }
+    #statusMsg { margin-top: 1rem; text-align: center; font-weight: bold; font-size: 0.96rem; }
+  </style>
 </head>
 <body>
-  <h2>Test Google Sheet Submission</h2>
+  <h3>Taps Inward Form</h3>
+  <form id="insertForm">
+    <label for="inwardDate">Inward Date: *</label>
+    <input type="date" id="inwardDate" required>
 
-  <form id="myForm">
-    <input type="text" id="name" placeholder="Name" required><br><br>
-    <input type="email" id="email" placeholder="Email" required><br><br>
-    <button type="submit">Submit</button>
+    <label for="tapID">Tap ID: *</label>
+    <input type="text" id="tapID" required>
+    
+    <label for="tapSize">Tap Size: *</label>
+    <input type="text" id="tapSize" required>
+    
+    <label for="tapType">Tap Type: *</label>
+    <div style="display: flex; gap: 2rem; align-items: center; margin-top: 0.5rem; margin-bottom: 1.5rem;">
+      <label><input type="radio" name="tapType" value="Cut Tap" required> Cut Tap</label>
+      <label><input type="radio" name="tapType" value="Roll Tap" required> Roll Tap</label>
+    </div>
+
+    <label for="supplierName">Supplier Name: *</label>
+    <input type="text" id="supplierName" required>
+
+    <label for="tapLife">Tap Life: *</label>
+    <input type="number" id="tapLife" required>
+
+    <button type="submit" id="submitBtn">Submit</button>
   </form>
 
-  <p id="status"></p>
+  <p id="statusMsg"></p>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyYx5dngcn_bZySE-OojD3AtzO1E7ZB6rVCE-jk5yHMDYB4vQWzWw8YpEPWf-vnYku6/exec"; // from Apps Script Deploy → Web App
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyYx5dngcn_bZySE-OojD3AtzO1E7ZB6rVCE-jk5yHMDYB4vQWzWw8YpEPWf-vnYku6/exec"; // Replace with your Web App URL
 
-    document.getElementById("myForm").addEventListener("submit", function(e) {
+    document.getElementById("insertForm").addEventListener("submit", function(e) {
       e.preventDefault();
-      document.getElementById("status").textContent = "Submitting...";
+      const status = document.getElementById("statusMsg");
+      const submitBtn = document.getElementById("submitBtn");
+
+      const inwardDate = document.getElementById("inwardDate").value;
+      const tapID = document.getElementById("tapID").value.trim();
+      const tapSize = document.getElementById("tapSize").value.trim();
+      const tapLife = document.getElementById("tapLife").value;
+      const tapType = document.querySelector('input[name="tapType"]:checked');
+      const supplierName = document.getElementById("supplierName").value.trim();
+
+      if (!inwardDate || !tapID || !tapSize || !tapLife || !tapType || !supplierName) {
+        status.textContent = "Please fill all required fields.";
+        status.style.color = "red";
+        return;
+      }
 
       const data = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value
+        inwardDate,
+        tapID,
+        tapSize,
+        tapType: tapType.value,
+        supplierName,
+        tapLife
       };
+
+      submitBtn.disabled = true;
+      status.textContent = "Submitting...";
+      status.style.color = "black";
 
       fetch(WEB_APP_URL, {
         method: "POST",
         mode: "no-cors", // bypasses CORS restriction
         body: JSON.stringify(data)
-      }).then(() => {
-        document.getElementById("status").textContent =
-          "Submitted! Check your Google Sheet.";
-        document.getElementById("myForm").reset();
-      }).catch(err => {
-        document.getElementById("status").textContent = "Error: " + err;
+      })
+      .then(() => {
+        status.textContent = "Data submitted successfully!";
+        status.style.color = "green";
+        document.getElementById("insertForm").reset();
+        submitBtn.disabled = false;
+      })
+      .catch(err => {
+        status.textContent = "Error: " + err;
+        status.style.color = "red";
+        submitBtn.disabled = false;
       });
     });
   </script>
