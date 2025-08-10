@@ -1,0 +1,45 @@
+<script>
+  const backendURL = "https://script.google.com/macros/s/AKfycbwsM1USEqITeUPxfotXS7sfJ35xBGkx3lOptLkRMHHTbZ2ot6QQdtHc02uBRaCzx5jwkg/exec"; // Your Web App URL
+
+  function handleSubmit() {
+    const status = document.getElementById("statusMsg");
+    const submitBtn = document.getElementById("submitBtn");
+
+    const inwardDate = document.getElementById("inwardDate").value;
+    const tapID = document.getElementById("tapID").value.trim();
+    const tapSize = document.getElementById("tapSize").value.trim();
+    const tapLife = document.getElementById("tapLife").value;
+    const tapType = document.querySelector('input[name="tapType"]:checked');
+    const tapTypeValue = tapType ? tapType.value : "";
+    const supplierName = document.getElementById("supplierName").value.trim();
+
+    if (!inwardDate || !tapID || !tapSize || !tapLife || !tapTypeValue || !supplierName) {
+      status.textContent = "Please fill all required fields.";
+      status.style.color = "red";
+      return;
+    }
+
+    const data = { inwardDate, tapID, tapSize, tapType: tapTypeValue, supplierName, tapLife };
+
+    submitBtn.disabled = true;
+    status.textContent = "Submitting...";
+    status.style.color = "black";
+
+    fetch(backendURL, {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+    .then(res => res.text())
+    .then(msg => {
+      status.textContent = msg;
+      status.style.color = "green";
+      document.getElementById("insertForm").reset();
+      submitBtn.disabled = false;
+    })
+    .catch(err => {
+      status.textContent = "Error: " + err;
+      status.style.color = "red";
+      submitBtn.disabled = false;
+    });
+  }
+</script>
