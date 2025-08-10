@@ -126,6 +126,12 @@
         status.style.color = "green";
         document.getElementById("insertForm").reset();
         submitBtn.disabled = false;
+
+         // Redirect after 1.5 seconds
+      setTimeout(() => {
+        window.location.href = "success.html"; // change to your GitHub HTML file path
+      }, 1500);
+        
       })
       .catch(err => {
         status.textContent = "Error: " + err;
