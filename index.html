@@ -1,59 +1,103 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 2rem;
-        background-color: #f0f4f8;
-        text-align: center;
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .block {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .full-width {
+      grid-column: 1 / span 2;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 18px;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 8px;
+    }
+    .menu-boxes {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .menu-box {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 12px;
+      background: #fafafa;
+      text-align: center;
+      transition: background 0.2s ease, transform 0.1s ease;
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+      text-decoration: none;
+    }
+    .menu-box:hover {
+      background: #e8f0fe;
+      transform: scale(1.02);
+    }
+    @media(max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
       }
-
-      h2 {
-        font-size: 1.8rem;
-        color: #333;
-        margin-bottom: 2rem;
+      .full-width {
+        grid-column: 1;
       }
+    }
+  </style>
+</head>
+<body>
 
-      .button-container {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        max-width: 400px;
-        margin: auto;
-      }
-
-      button {
-        padding: 1rem;
-        font-size: 1.1rem;
-        border: none;
-        border-radius: 8px;
-        background-color: #4CAF50;
-        color: white;
-        cursor: pointer;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        transition: background-color 0.3s ease;
-      }
-
-      button:hover {
-        background-color: #45a049;
-      }
-    </style>
-  </head>
-  <body>
-    <h2>WELCOME TO TAPPING MANAGEMENT V1</h2>
-    <div class="button-container">
-      
-      
-      <a href="new-tap-entry.html" class="btn">NEW TAP ENTRY</a>
-
-
-      <button onclick="window.location.href='https://script.google.com/macros/s/AKfycbxxp1vtHFnLNzGCQvcaLsrp-eRqab4s95Aegs2U5I5IRHmVZ3RD6uh6yf0OQDvds0z17A/exec'">
-        TAPPING PRODUCTION DATA FORM
-      </button>
-
+  <div class="container">
+    <!-- Block 1: TAPS DATA -->
+    <div class="block">
+      <h2>TAPS DATA</h2>
+      <div class="menu-boxes">
+        <a href="new-tap-entry.html" class="btn">NEW TAP ENTRY</a>
+        <a class="menu-box" href="https://link-to-edit-tap-entry">EDIT TAP ENTRY</a>
+        <a class="menu-box" href="https://link-to-tap-history-card">TAP HISTORY CARD</a>
+        <a class="menu-box" href="https://link-to-tap-health-check">TAP HEALTH CHECK</a>
+        <a class="menu-box" href="https://link-to-tap-summary">TAP SUMMARY</a>
+      </div>
     </div>
-  </body>
+
+    <!-- Block 2: PRODUCTION DATA -->
+    <div class="block">
+      <h2>PRODUCTION DATA</h2>
+      <div class="menu-boxes">
+        <a class="menu-box" href="https://link-to-enter-production-data">ENTER PRODUCTION DATA</a>
+        <a class="menu-box" href="https://link-to-view-last-entered">VIEW LAST ENTERED DATA</a>
+        <a class="menu-box" href="https://link-to-view-production-summary">VIEW SUMMARY</a>
+      </div>
+    </div>
+
+    <!-- Block 3: WIP DATA -->
+    <div class="block full-width">
+      <h2>WIP DATA</h2>
+      <div class="menu-boxes">
+        <a class="menu-box" href="https://link-to-enter-wip-data">ENTER WIP DATA</a>
+        <a class="menu-box" href="https://link-to-view-today-wip">VIEW TODAY ENTERED DATA</a>
+        <a class="menu-box" href="https://link-to-view-wip-summary">VIEW SUMMARY</a>
+      </div>
+    </div>
+  </div>
+
+</body>
 </html>
