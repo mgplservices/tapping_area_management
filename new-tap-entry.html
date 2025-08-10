@@ -1,82 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Taps Inward Form</title>
-<style>
-  body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: auto; background: #f0f4f8; }
-  h3 { text-align: center; }
-  label { display: block; margin-top: 10px; }
-  input, select { width: 100%; padding: 8px; margin-top: 4px; }
-  button { width: 100%; padding: 10px; margin-top: 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; }
-</style>
+<title>Test Google Sheets Save</title>
 </head>
 <body>
 
-<h3>Taps Inward Form</h3>
-
-<form id="insertForm">
-  <label>Inward Date</label>
-  <input type="date" id="inwardDate" required>
-
-  <label>Tap ID</label>
-  <input type="text" id="tapID" required>
-
-  <label>Tap Size</label>
-  <input type="text" id="tapSize" required>
-
-  <label>Tap Type</label>
-  <label><input type="radio" name="tapType" value="Cut Tap" required> Cut Tap</label>
-  <label><input type="radio" name="tapType" value="Roll Tap"> Roll Tap</label>
-
-  <label>Supplier Name</label>
-  <input type="text" id="supplierName" required>
-
-  <label>Tap Life</label>
-  <input type="number" id="tapLife" required>
-
+<h3>Test Form</h3>
+<form id="testForm">
+  Name: <input type="text" id="name" required><br><br>
+  Email: <input type="email" id="email" required><br><br>
   <button type="submit">Submit</button>
 </form>
 
-<p id="statusMsg"></p>
+<p id="status"></p>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw8vdLhhI9H97IfQ_JD8JKTBY-hoejvFZoOhAVRYkPBr5PvgWf3j_bK2Rye56HZ0UHjeg/exec"; // <-- Paste Apps Script Web App URL here
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwoRnt2JrNv4eRUcHozuwL-2vvJA5vjDYQ0LuBg28-xWT4Zf6guLXtEadYGRgE-geJX/exec"; // Replace with Apps Script URL
 
-document.getElementById("insertForm").addEventListener("submit", function(e) {
+document.getElementById("testForm").addEventListener("submit", function(e) {
   e.preventDefault();
-  
-  const status = document.getElementById("statusMsg");
-  
-  const data = {
-    inwardDate: document.getElementById("inwardDate").value,
-    tapID: document.getElementById("tapID").value.trim(),
-    tapSize: document.getElementById("tapSize").value.trim(),
-    tapType: document.querySelector('input[name="tapType"]:checked')?.value || "",
-    supplierName: document.getElementById("supplierName").value.trim(),
-    tapLife: document.getElementById("tapLife").value
-  };
 
-  status.textContent = "Submitting...";
   fetch(WEB_APP_URL, {
     method: "POST",
-    body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json" }
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value
+    })
   })
   .then(res => res.json())
-  .then(response => {
-    if (response.status === "success") {
-      status.textContent = "Data submitted successfully!";
-      status.style.color = "green";
-      document.getElementById("insertForm").reset();
-    } else {
-      status.textContent = "Error: " + (response.message || "Unknown error");
-      status.style.color = "red";
-    }
+  .then(data => {
+    document.getElementById("status").textContent = data.status === "success" 
+      ? "✅ Data saved to Google Sheets!" 
+      : "❌ Error saving data.";
   })
   .catch(err => {
-    status.textContent = "Error: " + err;
-    status.style.color = "red";
+    document.getElementById("status").textContent = "❌ Error: " + err;
   });
 });
 </script>
