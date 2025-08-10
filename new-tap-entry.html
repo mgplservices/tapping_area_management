@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
@@ -16,12 +16,12 @@
       text-align: center;
       color: #333;
       font-size: 1.44rem;
-      margin-bottom: 1.2rem; /* reduced from 2rem */
+      margin-bottom: 1.2rem;
     }
 
     label {
       display: block;
-      margin-top: 0.6rem; /* reduced from 1.4rem */
+      margin-top: 0.6rem;
       font-weight: bold;
       color: #444;
       font-size: 0.96rem;
@@ -29,9 +29,9 @@
 
     input, select {
       width: 100%;
-      padding: 0.6rem; /* reduced from 0.72rem */
-      margin-top: 0.3rem; /* reduced from 0.5rem */
-      margin-bottom: 0.6rem; /* reduced from 1.5rem */
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      margin-bottom: 0.6rem;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 0.96rem;
@@ -39,7 +39,7 @@
 
     button {
       width: 100%;
-      padding: 0.9rem; /* reduced from 1.08rem */
+      padding: 0.9rem;
       background-color: #4CAF50;
       color: white;
       font-size: 1.2rem;
@@ -48,7 +48,7 @@
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       transition: background-color 0.3s ease;
-      margin-top: 1rem; /* optional: adds breathing room above button */
+      margin-top: 1rem;
     }
 
     button:hover {
@@ -61,7 +61,7 @@
     }
 
     #statusMsg {
-      margin-top: 1rem; /* reduced from 2rem */
+      margin-top: 1rem;
       text-align: center;
       font-weight: bold;
       font-size: 0.96rem;
@@ -72,66 +72,62 @@
         padding: 1.5rem;
         font-size: 1.2rem;
       }
-
       h3 {
         font-size: 1.56rem;
       }
-
       label {
         font-size: 1.2rem;
       }
-
       input, select {
         font-size: 1.2rem;
       }
-
       button {
         font-size: 1.32rem;
       }
-
       #statusMsg {
         font-size: 1.2rem;
       }
     }
   </style>
 </head>
-  <body>
-    <h3>Taps Inward Form</h3>
-    <form id="insertForm">
-      <label for="inwardDate">Inward Date: *</label>
-      <input type="date" id="inwardDate" required>
+<body>
+  <h3>Taps Inward Form</h3>
+  <form id="insertForm">
+    <label for="inwardDate">Inward Date: *</label>
+    <input type="date" id="inwardDate" required>
 
-      <label for="tapID">Tap ID: *</label>
-      <input type="text" id="tapID" required>
-      
-      <label for="tapSize">Tap Size: *</label>
-      <input type="text" id="tapSize" required>
-      
-      <label for="tapType">Tap Type: *</label>
-      <div style="display: flex; gap: 2rem; align-items: center; margin-top: 0.5rem; margin-bottom: 1.5rem;">
-        <label><input type="radio" name="tapType" value="Cut Tap" required> Cut Tap</label>
-        <label><input type="radio" name="tapType" value="Roll Tap" required> Roll Tap</label>
-      </div>
+    <label for="tapID">Tap ID: *</label>
+    <input type="text" id="tapID" required>
+    
+    <label for="tapSize">Tap Size: *</label>
+    <input type="text" id="tapSize" required>
+    
+    <label for="tapType">Tap Type: *</label>
+    <div style="display: flex; gap: 2rem; align-items: center; margin-top: 0.5rem; margin-bottom: 1.5rem;">
+      <label><input type="radio" name="tapType" value="Cut Tap" required> Cut Tap</label>
+      <label><input type="radio" name="tapType" value="Roll Tap" required> Roll Tap</label>
+    </div>
 
-      <label for="supplierName">Supplier Name: *</label>
-      <input type="text" id="supplierName" required>
+    <label for="supplierName">Supplier Name: *</label>
+    <input type="text" id="supplierName" required>
 
+    <label for="tapLife">Tap Life: *</label>
+    <input type="number" id="tapLife" required>
 
-      <label for="tapLife">Tap Life: *</label>
-      <input type="number" id="tapLife" required>
+    <button type="button" id="submitBtn" onclick="handleSubmit()">Submit</button>
+  </form>
 
-      <button type="button" id="submitBtn" onclick="handleSubmit()">Submit</button>
-    </form>
-
-    <p id="statusMsg"></p>
+  <p id="statusMsg"></p>
 
 <script>
-  const backendURL = "https://script.google.com/macros/s/AKfycbwsM1USEqITeUPxfotXS7sfJ35xBGkx3lOptLkRMHHTbZ2ot6QQdtHc02uBRaCzx5jwkg/exec"; // Your Web App URL
+  // Change this to your deployed Apps Script Web App URL
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxxxxxxxxxxxxxxxx/exec";
 
   function handleSubmit() {
     const status = document.getElementById("statusMsg");
     const submitBtn = document.getElementById("submitBtn");
 
+    // Collect values
     const inwardDate = document.getElementById("inwardDate").value;
     const tapID = document.getElementById("tapID").value.trim();
     const tapSize = document.getElementById("tapSize").value.trim();
@@ -140,25 +136,28 @@
     const tapTypeValue = tapType ? tapType.value : "";
     const supplierName = document.getElementById("supplierName").value.trim();
 
+    // Validation
     if (!inwardDate || !tapID || !tapSize || !tapLife || !tapTypeValue || !supplierName) {
       status.textContent = "Please fill all required fields.";
       status.style.color = "red";
       return;
     }
 
+    // Prepare data
     const data = { inwardDate, tapID, tapSize, tapType: tapTypeValue, supplierName, tapLife };
 
     submitBtn.disabled = true;
     status.textContent = "Submitting...";
     status.style.color = "black";
 
-    fetch(backendURL, {
+    fetch(WEB_APP_URL, {
       method: "POST",
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" }
     })
-    .then(res => res.text())
-    .then(msg => {
-      status.textContent = msg;
+    .then(res => res.json())
+    .then(response => {
+      status.textContent = "Data submitted successfully!";
       status.style.color = "green";
       document.getElementById("insertForm").reset();
       submitBtn.disabled = false;
@@ -170,5 +169,5 @@
     });
   }
 </script>
-  </body>
+</body>
 </html>
