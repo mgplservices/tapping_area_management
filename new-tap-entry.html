@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Test Google Sheets Save</title>
+  <meta charset="UTF-8">
+  <title>Test Form</title>
 </head>
 <body>
+  <h2>Test Google Sheet Submission</h2>
 
-<h3>Test Form</h3>
-<form id="testForm">
-  Name: <input type="text" id="name" required><br><br>
-  Email: <input type="email" id="email" required><br><br>
-  <button type="submit">Submit</button>
-</form>
+  <form id="myForm">
+    <input type="text" id="name" placeholder="Name" required><br><br>
+    <input type="email" id="email" placeholder="Email" required><br><br>
+    <button type="submit">Submit</button>
+  </form>
 
-<p id="status"></p>
+  <p id="status"></p>
 
-<script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx4aVllTv6JNHsadAm2AQqm5HLHOZit7nUARSu0X9a9DZDzPRm04OkJruHehoMwU95O/exec"; // Replace with Apps Script URL
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyYx5dngcn_bZySE-OojD3AtzO1E7ZB6rVCE-jk5yHMDYB4vQWzWw8YpEPWf-vnYku6/exec"; // from Apps Script Deploy → Web App
 
-document.getElementById("testForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+    document.getElementById("myForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      document.getElementById("status").textContent = "Submitting...";
 
-  fetch(WEB_APP_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: document.getElementById("name").value,
-      email: document.getElementById("email").value
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("status").textContent = data.status === "success" 
-      ? "✅ Data saved to Google Sheets!" 
-      : "❌ Error saving data.";
-  })
-  .catch(err => {
-    document.getElementById("status").textContent = "❌ Error: " + err;
-  });
-});
-</script>
+      const data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value
+      };
 
+      fetch(WEB_APP_URL, {
+        method: "POST",
+        mode: "no-cors", // bypasses CORS restriction
+        body: JSON.stringify(data)
+      }).then(() => {
+        document.getElementById("status").textContent =
+          "Submitted! Check your Google Sheet.";
+        document.getElementById("myForm").reset();
+      }).catch(err => {
+        document.getElementById("status").textContent = "Error: " + err;
+      });
+    });
+  </script>
 </body>
 </html>
