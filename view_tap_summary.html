@@ -68,15 +68,17 @@ console.log("Data received from server: ",data);
               tableHTML += "</tr></thead><tbody>";
 
               // Decide your display order (0-based index, without last col)
-            const displayOrder = [0, 6, 1, 5, 4, 3, 2]; 
+            const displayOrder = [1, 2, 3, 4]; 
 
             rows.forEach(row => {
               tableHTML += "<tr>";
-              row.forEach(cell => {
+              displayOrder.forEach((colIndex, idx) => {
                   tableHTML += `<td style='border: 1px solid #333; padding: 6px;'>
-                                  ${cell ?? ""}
+                                  ${row[colIndex] ?? ""}
                                 </td>`;
+                
               });
+
               tableHTML += "</tr>";
             });
               tableHTML += "</tbody></table>";
